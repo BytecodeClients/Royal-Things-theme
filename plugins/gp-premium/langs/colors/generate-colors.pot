@@ -1,0 +1,211 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Generate Colors\n"
+"POT-Creation-Date: 2017-03-09 11:41-0800\n"
+"PO-Revision-Date: 2015-04-04 15:41-0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.12\n"
+"X-Poedit-Basepath: ../..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: langs\n"
+"X-Poedit-SearchPath-1: colors/functions\n"
+
+#: colors/functions/functions.php:40
+msgid "Colors"
+msgstr ""
+
+#: colors/functions/functions.php:50
+msgid "Top Bar"
+msgstr ""
+
+#: colors/functions/functions.php:73 colors/functions/functions.php:160
+#: colors/functions/functions.php:256 colors/functions/functions.php:388
+#: colors/functions/functions.php:519 colors/functions/functions.php:655
+#: colors/functions/functions.php:743 colors/functions/functions.php:1044
+#: colors/functions/secondary-nav-colors.php:71
+#: colors/functions/secondary-nav-colors.php:223
+msgid "Background"
+msgstr ""
+
+#: colors/functions/functions.php:89 colors/functions/functions.php:175
+#: colors/functions/functions.php:320 colors/functions/functions.php:452
+#: colors/functions/functions.php:533 colors/functions/functions.php:669
+#: colors/functions/functions.php:757 colors/functions/functions.php:1058
+#: colors/functions/secondary-nav-colors.php:95
+#: colors/functions/secondary-nav-colors.php:247
+msgid "Text"
+msgstr ""
+
+#: colors/functions/functions.php:95 colors/functions/functions.php:181
+#: colors/functions/functions.php:539 colors/functions/functions.php:675
+#: colors/functions/functions.php:763 colors/functions/functions.php:1064
+msgid "Link"
+msgstr ""
+
+#: colors/functions/functions.php:101 colors/functions/functions.php:187
+#: colors/functions/functions.php:545 colors/functions/functions.php:681
+#: colors/functions/functions.php:769 colors/functions/functions.php:1070
+msgid "Link Hover"
+msgstr ""
+
+#: colors/functions/functions.php:137
+msgid "Header"
+msgstr ""
+
+#: colors/functions/functions.php:193
+msgid "Site Title"
+msgstr ""
+
+#: colors/functions/functions.php:199
+msgid "Tagline"
+msgstr ""
+
+#: colors/functions/functions.php:233
+msgid "Primary Navigation"
+msgstr ""
+
+#: colors/functions/functions.php:281 colors/functions/functions.php:413
+#: colors/functions/secondary-nav-colors.php:118
+#: colors/functions/secondary-nav-colors.php:270
+msgid "Background Hover"
+msgstr ""
+
+#: colors/functions/functions.php:306 colors/functions/functions.php:438
+#: colors/functions/secondary-nav-colors.php:165
+#: colors/functions/secondary-nav-colors.php:317
+msgid "Background Current"
+msgstr ""
+
+#: colors/functions/functions.php:326 colors/functions/functions.php:458
+#: colors/functions/secondary-nav-colors.php:142
+#: colors/functions/secondary-nav-colors.php:294
+msgid "Text Hover"
+msgstr ""
+
+#: colors/functions/functions.php:332 colors/functions/functions.php:464
+#: colors/functions/secondary-nav-colors.php:189
+#: colors/functions/secondary-nav-colors.php:341
+msgid "Text Current"
+msgstr ""
+
+#: colors/functions/functions.php:365
+msgid "Primary Sub-Navigation"
+msgstr ""
+
+#: colors/functions/functions.php:496
+msgid "Content"
+msgstr ""
+
+#: colors/functions/functions.php:551
+msgid "Content Title"
+msgstr ""
+
+#: colors/functions/functions.php:557
+msgid "Blog Post Title"
+msgstr ""
+
+#: colors/functions/functions.php:563
+msgid "Blog Post Title Hover"
+msgstr ""
+
+#: colors/functions/functions.php:569
+msgid "Entry Meta Text"
+msgstr ""
+
+#: colors/functions/functions.php:575
+msgid "Entry Meta Links"
+msgstr ""
+
+#: colors/functions/functions.php:581
+msgid "Entry Meta Links Hover"
+msgstr ""
+
+#: colors/functions/functions.php:587
+msgid "Heading 1 (H1) Color"
+msgstr ""
+
+#: colors/functions/functions.php:593
+msgid "Heading 2 (H2) Color"
+msgstr ""
+
+#: colors/functions/functions.php:599
+msgid "Heading 3 (H3) Color"
+msgstr ""
+
+#: colors/functions/functions.php:632
+msgid "Sidebar Widgets"
+msgstr ""
+
+#: colors/functions/functions.php:687 colors/functions/functions.php:775
+msgid "Widget Title"
+msgstr ""
+
+#: colors/functions/functions.php:720
+msgid "Footer Widgets"
+msgstr ""
+
+#: colors/functions/functions.php:808
+msgid "Forms"
+msgstr ""
+
+#: colors/functions/functions.php:831
+msgid "Form Background"
+msgstr ""
+
+#: colors/functions/functions.php:856
+msgid "Form Background Focus"
+msgstr ""
+
+#: colors/functions/functions.php:881
+msgid "Form Border"
+msgstr ""
+
+#: colors/functions/functions.php:906
+msgid "Form Border Focus"
+msgstr ""
+
+#: colors/functions/functions.php:931
+msgid "Form Button"
+msgstr ""
+
+#: colors/functions/functions.php:956
+msgid "Form Button Hover"
+msgstr ""
+
+#: colors/functions/functions.php:970
+msgid "Form Text"
+msgstr ""
+
+#: colors/functions/functions.php:976
+msgid "Form Text Focus"
+msgstr ""
+
+#: colors/functions/functions.php:982
+msgid "Form Button Text"
+msgstr ""
+
+#: colors/functions/functions.php:988
+msgid "Form Button Text Hover"
+msgstr ""
+
+#: colors/functions/functions.php:1021
+msgid "Footer"
+msgstr ""
+
+#: colors/functions/secondary-nav-colors.php:48
+msgid "Secondary Navigation"
+msgstr ""
+
+#: colors/functions/secondary-nav-colors.php:200
+msgid "Secondary Sub-Navigation"
+msgstr ""
