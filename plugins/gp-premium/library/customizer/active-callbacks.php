@@ -23,6 +23,25 @@ function generate_mobile_header_activated()
 }
 endif;
 
+if ( ! function_exists( 'generate_mobile_header_sticky_activated' ) ) :
+/**
+ * Check to see if the mobile header is activated
+ */
+function generate_mobile_header_sticky_activated()
+{
+	if ( ! function_exists( 'generate_menu_plus_get_defaults' ) ) {
+		return false;
+	}
+	
+	$generate_menu_plus_settings = wp_parse_args( 
+		get_option( 'generate_menu_plus_settings', array() ), 
+		generate_menu_plus_get_defaults() 
+	);
+	
+	return ( 'enable' == $generate_menu_plus_settings[ 'mobile_header' ] && 'enable' == $generate_menu_plus_settings[ 'mobile_header_sticky' ] ) ? true : false;
+}
+endif;
+
 if ( ! function_exists( 'generate_sticky_navigation_activated' ) ) :
 /**
  * Check to see if the sticky navigation is activated

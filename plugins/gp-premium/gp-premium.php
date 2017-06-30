@@ -3,7 +3,7 @@
 Plugin Name: GP Premium
 Plugin URI: https://generatepress.com
 Description: The entire bundle of GeneratePress add-ons. Configure add-ons by going to <a href="themes.php?page=generate-options">Appearance &gt; GeneratePress</a>.
-Version: 1.3
+Version: 1.3.1
 Author: Tom Usborne
 Author URI: https://tomusborne.com
 License: GNU General Public License v2 or later
@@ -15,11 +15,11 @@ Text Domain: gp-premium
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 // Set our version
-define( 'GP_PREMIUM_VERSION', '1.3' );
+define( 'GP_PREMIUM_VERSION', '1.3.1' );
 
 // Set our root directory
 define( 'GP_LIBRARY_DIRECTORY', trailingslashit( plugin_dir_path( __FILE__ ) . '/library' ) );
-define( 'GP_LIBRARY_VERSION', 1.0 );
+define( 'GP_LIBRARY_VERSION', 1.1 );
 
 if ( ! function_exists( 'generatepress_is_module_active' ) ) :
 /**
@@ -227,8 +227,38 @@ function generate_premium_theme_information() {
 endif;
 
 add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'generate_add_configure_action_link' );
-
+/**
+ * Show a "Configure" link in the plugin action links.
+ *
+ * @since 1.3
+ */
 function generate_add_configure_action_link( $links ) {
 	$configuration_link = '<a href="' . admin_url( 'themes.php?page=generate-options' ) . '">' . __( 'Configure', 'gp-premium' ) . '</a>';
 	return array_merge( $links, array( $configuration_link ) );
+}
+
+add_action( 'admin_init', 'generatepress_deactivate_standalone_addons' );
+/**
+ * Deactivate any standalone add-ons if they're active.
+ *
+ * @since 1.3.1
+ */
+function generatepress_deactivate_standalone_addons() {
+	$addons = array(
+		'generate-backgrounds/generate-backgrounds.php',
+		'generate-blog/generate-blog.php',
+		'generate-colors/generate-colors.php',
+		'generate-copyright/generate-copyright.php',
+		'generate-disable-elements/generate-disable-elements.php',
+		'generate-hooks/generate-hooks.php',
+		'generate-ie/generate-ie.php',
+		'generate-menu-plus/generate-menu-plus.php',
+		'generate-page-header/generate-page-header.php',
+		'generate-secondary-nav/generate-secondary-nav.php',
+		'generate-sections/generate-sections.php',
+		'generate-spacing/generate-spacing.php',
+		'generate-typography/generate-fonts.php'
+	);
+	
+	deactivate_plugins( $addons );
 }

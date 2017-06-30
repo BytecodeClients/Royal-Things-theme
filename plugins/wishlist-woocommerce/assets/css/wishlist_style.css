@@ -1,0 +1,159 @@
+.xoo_wishlist_button,.xoo-dialog-icon,.xoo-dialog-close {
+/* use !important to prevent issues with browser extensions that change fonts */
+	speak:none;
+	font-style:normal;
+	font-weight:400;
+	font-variant:normal;
+	text-transform:none;
+	line-height:1;
+	text-align:left!important;
+/* Better Font Rendering =========== */
+	-webkit-font-smoothing:antialiased;
+	-moz-osx-font-smoothing:grayscale;
+}
+
+.xoo_wishlist_button:before {
+	font:normal normal normal 14px/1 FontAwesome;
+	font-size: 19px;
+}
+
+
+.archive .xoo_wishlist_button {
+	position: absolute;
+	z-index: 1;
+}
+
+.xoo_wishlist_add {
+	color:#555;
+	text-align:left;
+	margin-left:5px;
+	margin-top: 5px;
+	padding:5px;
+	font-size:19px;
+}
+
+.xoo_wishlist_button:hover {
+	cursor:pointer;
+}
+
+.xoo-wishlist-remove-cross {
+	color:red;
+	font-size:19px;
+	padding:2px;
+}
+
+.icon-undo:before {
+	content:"\f0e2";
+}
+
+.icon-heart:before {
+	content:"\f08a";
+}
+
+li.product:hover .icon-heart:before,
+.active.icon-heart:before {
+	content:"\f004" !important;
+}
+
+.icon-cross:before {
+	content:"\f00d";
+}
+
+.clearfix:after {
+	content:" ";
+/* Older browser do not support empty content */
+	visibility:hidden;
+	display:block;
+	height:0;
+	clear:both;
+}
+
+.clearfix:after {
+	content:"";
+	display:table;
+	clear:both;
+}
+
+.single .xoo_wishlist_add {
+	display:inline-block;
+	border: solid 1px #000000;
+	width:100%;
+	max-width: 320px;
+	text-align: center !important;
+}
+
+.xoo-wishlist-text {
+	color:#2f2f2f;
+	font-weight:400;
+	display:inline-block;
+	padding-left:5px;
+}
+
+.xoo-wishlist-dialog {
+	width:380px;
+	top:0;
+	left:0;
+	margin:auto;
+	right:0;
+	z-index:99999;
+	display:none;
+	position:fixed;
+	
+	display: none !important;
+}
+
+.xoo-dialog-icon {
+	width:80px;
+	float:left;
+	color:red;
+	font-size:37px;
+	background-color:#444;
+	height:77px;
+}
+
+.xoo-middle {
+	vertical-align:middle;
+	display:flex;
+	justify-content:center;
+	align-content:center;
+	flex-direction:column;
+	text-align:center;
+}
+
+.xoo-dialog-info {
+	height:77px;
+	width:300px;
+	float:right;
+	font-size:17px;
+	font-weight:700;
+	background-color:#333;
+	color:#fff;
+}
+
+.xoo-dialog-info a {
+	color:#FDF5E6;
+}
+
+.xoo-dialog-info a:hover {
+	color:#CC5252;
+}
+
+.xoo-dialog-close {
+	display:inline-block;
+	position:absolute;
+	right:0;
+	padding:4px;
+	color:#CC5252;
+	cursor:pointer;
+}
+
+.xoo-wishlist-undo {
+	font-size:16px;
+	position:absolute;
+	left:0;
+	right:0;
+}
+
+.xoo-wishlist-undo-icon {
+	text-align:center;
+}

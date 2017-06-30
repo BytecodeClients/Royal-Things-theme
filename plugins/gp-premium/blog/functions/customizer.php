@@ -601,14 +601,13 @@ if ( ! function_exists( 'generate_blog_customizer_live_preview' ) ) :
  * Add our live preview javascript
  */
 add_action( 'customize_preview_init', 'generate_blog_customizer_live_preview' );
-function generate_blog_customizer_live_preview()
-{
-	wp_enqueue_script( 
-		  'generate-blog-themecustomizer',
-		  plugin_dir_url( __FILE__ ) . '/js/customizer.js',
-		  array( 'jquery','customize-preview' ),
-		  GENERATE_BLOG_VERSION,
-		  true
+function generate_blog_customizer_live_preview() {
+	wp_enqueue_script(
+		'generate-blog-themecustomizer',
+		trailingslashit( plugin_dir_url( __FILE__ ) ) . 'js/customizer.js',
+		array( 'jquery', 'customize-preview' ),
+		GENERATE_BLOG_VERSION,
+		true
 	);
 }
 endif;

@@ -34,6 +34,12 @@
 	clear: none !important;
 }
 
+.woocommerce ul.products li.product, 
+.woocommerce-page ul.products li.product {
+	margin-left: 3.8%;
+	margin-right: 0;
+}
+
 .woocommerce .wc-mobile-columns-1 ul.products li.product, 
 .woocommerce-page .wc-mobile-columns-1 ul.products li.product {
 	width: 100%;

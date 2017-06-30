@@ -276,6 +276,7 @@ nav li.wc-menu-item {
 
 .cart-contents > span {
     line-height: 0;
+	margin-left: 10px;
 }
 
 nav span.count {
@@ -629,11 +630,48 @@ a.button.wc-forward:after {
     font-family: FontAwesome;
 	content: "\f105";
 	float: right;
-	color: rgba(0,0,0,0.5);
 	font-weight:bold;
 	font-size: 115%;
 }
 
 .woocommerce-account .woocommerce-MyAccount-navigation {
     width: 25%;
+}
+
+.woocommerce #payment .terms {
+    padding: 20px;
+}
+
+h2.woocommerce-loop-category__title mark {
+    background: none;
+    font-size: 80%;
+    opacity: 0.5;
+}
+
+.woocommerce form.checkout_coupon, 
+.woocommerce form.login, 
+.woocommerce form.register {
+    padding: 0;
+    margin: 0 0 1.5em;
+    border: 0;
+}
+
+#ship-to-different-address {
+    padding: 3px;
+    font-size: inherit;
+}
+
+.woocommerce-image-align-left .products ul, 
+.woocommerce-image-align-left ul.products,
+.woocommerce-image-align-left .products ul:after, 
+.woocommerce-image-align-left ul.products:after,
+.woocommerce-image-align-right .products ul, 
+.woocommerce-image-align-right ul.products,
+.woocommerce-image-align-right .products ul:after, 
+.woocommerce-image-align-right ul.products:after {
+    clear: none;
+}
+
+.woocommerce nav.woocommerce-pagination {
+	clear: both;
 }

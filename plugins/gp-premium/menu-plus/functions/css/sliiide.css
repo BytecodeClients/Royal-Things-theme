@@ -156,7 +156,7 @@
 	display: block;
 }
 
-#generate-slideout-menu .slideout-menu .menu-item-has-children>a:first-child {
+body:not(.rtl) #generate-slideout-menu .slideout-menu .menu-item-has-children>a:first-child {
 	padding-right: 0;
 }
 

@@ -121,7 +121,14 @@ if ( ! class_exists( 'YITH_WCAN_Frontend' ) ) {
                 $filtered_posts   = array();
                 $queried_post_ids = array();
 
-                if( class_exists( 'QTX_Translator' ) && defined('YIT_CORE_VERSION') && '1.0.0' == YIT_CORE_VERSION ){
+                $problematic_theme = array(
+                    'basel'
+                );
+
+                $is_qTranslateX_and_yit_core_1_0_0 = class_exists( 'QTX_Translator' ) && defined('YIT_CORE_VERSION') && '1.0.0' == YIT_CORE_VERSION;
+                $is_problematic_theme = in_array( wp_get_theme()->get_template(), $problematic_theme );
+
+                if( $is_qTranslateX_and_yit_core_1_0_0 || $is_problematic_theme ){
                     add_filter( 'yith_wcan_skip_layered_nav_query', '__return_true' );
                 }
 

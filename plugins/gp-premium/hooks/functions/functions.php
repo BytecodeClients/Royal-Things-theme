@@ -7,9 +7,29 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 require plugin_dir_path( __FILE__ ) . 'hooks.php';
 
+if ( ! function_exists( 'generate_hooks_php_check' ) ) :
+add_action( 'admin_notices','generate_hooks_php_check' );
+/**
+ * Checks if DISALLOW_FILE_EDIT is defined.
+ * If it is, tell the user to disallow PHP execution in GP Hooks.
+ *
+ * @since 1.3.1
+ */
+function generate_hooks_php_check() {
+	if ( defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT && ! defined( 'GENERATE_HOOKS_DISALLOW_PHP' ) ) {
+		printf( 
+			'<div class="notice notice-error">
+				<p>%1$s <a href="https://docs.generatepress.com/article/disallow-php-execution/" target="_blank">%2$s</a></p>
+			</div>',
+			esc_html__( 'DISALLOW_FILE_EDIT is defined. You should also disallow PHP execution in GP Hooks.','generate-hooks' ),
+			esc_html__( 'Learn how','generate-hooks' )
+		);
+	}
+}
+endif;
+
 if ( ! function_exists( 'generate_hooks_setup' ) ) :
-function generate_hooks_setup()
-{
+function generate_hooks_setup() {
 	// Just to verify that we're activated.
 }
 endif;

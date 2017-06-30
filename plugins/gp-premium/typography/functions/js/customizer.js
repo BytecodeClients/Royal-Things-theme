@@ -144,9 +144,9 @@ gp_premium_typography_live_update( 'footer_font_size', '.site-info', 'font-size'
 /** 
  * WooCommerce product title
  */
-gp_premium_typography_live_update( 'wc_product_title_font_size', '.woocommerce ul.products li.product .woocommerce-LoopProduct-link h2', 'font-size', 'px', gp_typography.desktop );
-gp_premium_typography_live_update( 'mobile_wc_product_title_font_size', '.woocommerce ul.products li.product .woocommerce-LoopProduct-link h2', 'font-size', 'px', gp_typography.mobile );
-gp_premium_typography_live_update( 'wc_product_title_font_weight', '.woocommerce ul.products li.product .woocommerce-LoopProduct-link h2', 'font-weight' );
-gp_premium_typography_live_update( 'wc_product_title_font_transform', '.woocommerce ul.products li.product .woocommerce-LoopProduct-link h2', 'text-transform' );
+gp_premium_typography_live_update( 'wc_product_title_font_size', '.woocommerce ul.products li.product .woocommerce-LoopProduct-link h2, .woocommerce ul.products li.product .woocommerce-loop-category__title', 'font-size', 'px', gp_typography.desktop );
+gp_premium_typography_live_update( 'mobile_wc_product_title_font_size', '.woocommerce ul.products li.product .woocommerce-LoopProduct-link h2, .woocommerce ul.products li.product .woocommerce-loop-category__title', 'font-size', 'px', gp_typography.mobile );
+gp_premium_typography_live_update( 'wc_product_title_font_weight', '.woocommerce ul.products li.product .woocommerce-LoopProduct-link h2, .woocommerce ul.products li.product .woocommerce-loop-category__title', 'font-weight' );
+gp_premium_typography_live_update( 'wc_product_title_font_transform', '.woocommerce ul.products li.product .woocommerce-LoopProduct-link h2, .woocommerce ul.products li.product .woocommerce-loop-category__title', 'text-transform' );
 
 gp_premium_typography_live_update( 'wc_related_product_title_font_size', '.woocommerce .up-sells ul.products li.product .woocommerce-LoopProduct-link h2, .woocommerce .cross-sells ul.products li.product .woocommerce-LoopProduct-link h2, .woocommerce .related ul.products li.product .woocommerce-LoopProduct-link h2', 'font-size', 'px' );

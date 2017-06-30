@@ -1,23 +1,23 @@
-.sticky-enabled .gen-sidebar-nav.is_stuck .main-navigation{
-	margin-bottom:0px;
+.sticky-enabled .gen-sidebar-nav.is_stuck .main-navigation {
+	margin-bottom: 0px;
 }
 
 .sticky-enabled .gen-sidebar-nav.is_stuck {
-	z-index:500;
+	z-index: 500;
 }
 
 .sticky-enabled .main-navigation.is_stuck {
-	box-shadow:0 2px 2px -2px rgba(0, 0, 0, .2);
+	box-shadow: 0 2px 2px -2px rgba(0, 0, 0, .2);
 }
 
 .sticky-enabled .fixfixed .is_stuck {
 	position: relative !important;
 }
 
-.nav-float-right .main-navigation.is_stuck:not(.grid-container):not(#sticky-placeholder),
-.nav-float-left .main-navigation.is_stuck:not(.grid-container):not(#sticky-placeholder) {
-	width: 100% !important;
+.navigation-stick:not(.gen-sidebar-nav) {
 	left: 0;
+	right: 0;
+	width: 100% !important;
 }
 
 @media (min-width: 769px) {
@@ -46,14 +46,5 @@
 
 	.nav-float-right .is_stuck.main-navigation {
 		text-align: right;
-	}
-}
-
-@media (max-width: 768px) {
-	.navigation-stick {
-		width: 100% !important;
-		margin-left: 0 !important;
-		margin-right: 0 !important;
-		left: 0;
 	}
 }

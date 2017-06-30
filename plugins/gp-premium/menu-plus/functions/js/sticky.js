@@ -5,8 +5,6 @@
         scrollDir = '',
         scrollDistance = 0,
         active = false,
-        bottom = false,
-        hold = false,
         disabled = false,
         landscape = false,
         portrait = false,
@@ -18,6 +16,8 @@
         elementOffset = 0,
         elementOffsetBottom = 0,
         $element = $(),
+		$body = $( 'body' ),
+		stickyDelay = 0,
         topMargin = 0,
         offset = 0,
         $placeholder = $( elem ).clone().css({
@@ -31,7 +31,6 @@
         $parent = $(),
         stickpoints = {
             top:0,
-            bottom:0,
             custom:[]
         },
         left,
@@ -43,23 +42,24 @@
             topMargin: "auto",
             keepInWrapper: false,
             wrapperSelector: '',
-            zIndex: 99,
-            syncPosition:false,
+            zIndex: 100,
 			namespaceClass: "stuckElement",
 			fixedClass: "isStuck",
             disableOn:function(){
                 return true;
-            }
+            },
+			transition: "none"
         },
                 
-        getTopMargin = function () {
+        getTopMargin = function() {
+			var wpAdminBar = ( jQuery( '#wpadminbar' ).length > 0 && jQuery( '#wpadminbar' ).css( 'position' ) == 'fixed' ) ? jQuery( '#wpadminbar' ).outerHeight() : 0;
             if (options.topMargin === 'auto') {
-                return parseInt($element.css('marginTop'));
+                return parseInt( wpAdminBar + $element.css( 'marginTop' ) );
             } else {
-                if (isNaN(options.topMargin) && options.topMargin.search("px") > 0) {
-                    return parseInt(options.topMargin.replace("px", ""));
-                } else if (!isNaN(parseInt(options.topMargin))) {
-                    return parseInt(options.topMargin);
+                if ( isNaN( options.topMargin ) && options.topMargin.search( "px" ) > 0 ) {
+                    return parseInt( wpAdminBar + options.topMargin.replace( "px", "" ) );
+                } else if ( ! isNaN( parseInt( options.topMargin ) ) ) {
+                    return parseInt( wpAdminBar + options.topMargin );
                 } else {
                     void 0;
                     return 0;
@@ -67,156 +67,185 @@
             }
         },
                 
-        unStick = function(){
+        unStick = function() {
             void 0;
 			$placeholder.hide().removeClass( options.fixedClass ).removeClass( 'sticky-navigation-transition' );
+			
             $element.removeClass(options.fixedClass)
             .css({ 
-                maxWidth:"",
-                marginTop: "", 
-                marginLeft:"",
-                marginRight:"",
-                position: "",
-                top: "",
-                left: "", 
-                right: "",
-                bottom:"",
-				width:""
-            }).removeClass( 'sticky-navigation-transition' );
+                'max-width': '',
+                'margin-top': '', 
+                'margin-left': '',
+                'margin-right': '',
+                'position': '',
+                'top': '',
+                'left': '', 
+                'right': '',
+				'width': '',
+				'opacity': '',
+				'height': '',
+				'overflow': '',
+				'-webkit-transform': '',
+				'-ms-transform': '',
+				'transform': '',
+				'-webkit-transition': '',
+				'-ms-transition': '',
+				'transition': ''
+            })
+			.removeClass( 'sticky-navigation-transition' )
+			.removeClass( 'navigation-transition' );
+			
             active = false;
-            bottom = false;
-            hold = false;
-            if(options.syncPosition)
-                syncMargins();
 			
 			$element.trigger( 'stickUp:unStick' );
         },
-                
-        holdIt = function(forceBottom){
-            void 0;
-			$placeholder.show().addClass( options.fixedClass );
-            var offsetParent = $placeholder.offsetParent();
-            
-            if (forceBottom){
-                $element.css({
-                    position: "absolute"
-                });
-                var topOffset = 
-                    ($parent.offset().top + $parent.outerHeight()) //bottom of container
-                    - offsetParent.offset().top - currentOuterHeight //parent-position - elementHeight
-                    - parseInt($parent.css("paddingBottom"));
-            }
-            void 0;
-            void 0;
-            $element.css({
-                position: "absolute",
-                marginTop: topMargin,
-                bottom:"",
-                left:$placeholder.position().left,
-                top: forceBottom? topOffset : $element.offset().top - offsetParent.offset().top - topMargin
-            });
-			
-			$element.trigger( 'stickUp:holdIt' );
-        },
-        stickIt = function(){
+		
+        stickIt = function() {
             void 0;
             active = true;
+			
+			if ( 'fade' == options.transition ) {
+				$element.hide();
+			}
+			
+			if ( 'slide' == options.transition || options.scrollHide ) {
+				$element.css({
+					'height': '0',
+					'overflow': 'hidden',
+					'visibility': 'hidden'
+				});
+			}
+				
 			$placeholder.show().addClass( options.fixedClass );
+			
+			if ( 'left' == $element.css( 'float' ) || 'right' == $element.css( 'float' ) ) {
+				$placeholder.css( 'float', $element.css( 'float' ) );
+				$placeholder.attr( 'style', $placeholder.attr( 'style' ) + 'width:auto !important' );
+			}
+			
+			if ( 'slide' == options.transition && 'block' == $placeholder.css( 'display' ) ) {
+				$element.css({
+					'-webkit-transform': 'translateY(-100%)',
+					'-ms-transform': 'translateY(-100%)',
+					'transform': 'translateY(-100%)',
+					'-webkit-transition': 'transform 300ms ease-in-out',
+					'-ms-transition': 'transform 300ms ease-in-out',
+					'transition': 'transform 300ms ease-in-out'
+				});
+			}
+			
             $element.addClass(options.fixedClass);
             var topDistance = -offset;
 
             $element.css({
-                //maxWidth: parseInt($element.outerWidth()),
-                marginTop: topMargin,
-                position: "fixed",
-                top: topDistance + 'px',
-                left:"",
-                right:"",
-                //right: "auto",
-                bottom:""
+                'margin-top': topMargin,
+                'position': 'fixed',
+                'top': topDistance + 'px',
+                'left': '',
+                'right': ''
             });
 			
 			$element.trigger( 'stickUp:stickIt' );
-        },
-        syncWidth = function(){
-			if($placeholder.width()!==$element.outerWidth()) {
-				$element.outerWidth($placeholder.outerWidth());
+			
+			if ( 'fade' == options.transition ) {
+				$element.fadeIn( 300 );
+			}
+			
+			if ( 'slide' == options.transition ) {
+				$element.one("webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend", function(event) {
+					$element.css({
+						'visibility': '',
+						'height': '',
+						'overflow': '',
+						'-webkit-transform': 'translateY(0%)',
+						'-ms-transform': 'translateY(0%)',
+						'transform': 'translateY(0%)',
+						'-webkit-transition': 'transform 300ms ease-in-out',
+						'-ms-transition': 'transform 300ms ease-in-out',
+						'transition': 'transform 300ms ease-in-out'
+					});
+				});
+			}
+			
+			if ( options.scrollHide ) {
+				$element.css({
+					'height': '',
+					'overflow': '',
+					'visibility': ''
+				});
 			}
         },
-        syncPosition = function(){
-            //retrieve margin
-            left = $placeholder.offset().left;
-            if(left !== $element.offset().left);
-                $element.offset({'left':left});
-        },
-        syncMargins = function(){
-            //retrieve margin
-            $placeholder.css({
-                'margin-left':$element.css('margin-left'),
-                'margin-right':$element.css('margin-left')
-            });
-            $element.css({
-                 "margin-left" :$placeholder.css('margin-left'),
-                 "margin-right" :$placeholder.css('margin-right')
-            });
+		
+		syncWidth = function() {
+			if( $placeholder.width() !== $element.outerWidth() ) {
+				$element.outerWidth( $placeholder.outerWidth() );
+			}
         },
 
-        stickUpScrollHandlerFn = function (event) {
-            if(!options.disableOn()){
-                if(!disabled){
+        stickUpScrollHandlerFn = function(event) {
+            if ( ! options.disableOn() ) {
+                if( !disabled ) {
                     void 0;
                     unStick();
                     disabled = true;
                 }
                 return;
-            }else if(disabled){
+            } else if ( disabled ) {
                 disabled = false;
             }
-            if(options.keepInWrapper && !$parent.is(':visible')) {
+			
+            if ( options.keepInWrapper && ! $parent.is( ':visible' ) ) {
                 return;
             }
-            scroll = $(event.target).scrollTop();
-            scrollDir = (scroll >= lastScrollTop) ? 'down' : 'up';
-            scrollDistance = Math.abs(lastScrollTop - scroll);
-            viewportHeight = $(window).outerHeight();
-            scrollBottom = scroll+viewportHeight;
+			
+            scroll = $( event.target ).scrollTop();
+            scrollDir = ( scroll >= lastScrollTop ) ? 'down' : 'up';
+            scrollDistance = Math.abs( lastScrollTop - scroll );
+            viewportHeight = $( window ).outerHeight();
+            scrollBottom = scroll + viewportHeight;
             lastScrollTop = scroll;
             elementOffset = $element.offset().top;
-            stickyHeight = parseInt($element.outerHeight()+topMargin)+parseInt($element.css('marginBottom'));
-			if (!active && !hold && !bottom) {
-                outerHeight = parseInt($element.outerHeight(true));
-                if(!bottom && !hold)
-                    stickpoints.top = parseInt($element.offset().top);
-                else
-                stickpoints.top = parseInt($placeholder.offset().top);
-                left = parseInt($element.offset().left)+5;
-            }
-			currentOuterHeight = parseInt($element.outerHeight())+parseInt($element.css('margin-bottom'))+topMargin;
-            if(options.keepInWrapper)
-                stickpoints.bottom = $parent.offset().top+$parent.outerHeight()-parseInt($parent.css('paddingBottom'));
-            else
-                stickpoints.bottom = $(document).outerHeight();
-            elementOffsetBottom = $element.offset().top+currentOuterHeight;
-            
-			landscape = true;
-			if(portrait){
-				if(hold)
-					holdIt();
-				portrait = false;
-			}
-			// Google like reappearance on upward scroll
-			if (options.scrollHide)
-				offset = stickyHeight + options.lazyHeight; //negative offset for initial hiding
-			else
-				offset = options.lazyHeight;
+            stickyHeight = parseInt( $element.outerHeight() + topMargin ) + parseInt( $element.css( 'marginBottom' ) );
 			
-			if(!active && !bottom && scroll >= stickpoints.top - topMargin + offset 
-			|| bottom && hold && scroll <= elementOffset - topMargin + offset){
+			if ( ! active ) {
+				outerHeight = parseInt( $element.outerHeight( true ) );
+				stickpoints.top = parseInt( $element.offset().top );
+				left = parseInt( $element.offset().left ) + 5;
+            }
+			
+			currentOuterHeight = parseInt( $element.outerHeight() ) + parseInt( $element.css( 'margin-bottom' ) ) + topMargin;
+			
+            if ( options.keepInWrapper ) {
+                stickpoints.bottom = $parent.offset().top + $parent.outerHeight() - parseInt( $parent.css( 'paddingBottom' ) );
+            } else {
+                stickpoints.bottom = $( document ).outerHeight();
+			}
+			
+            elementOffsetBottom = $element.offset().top + currentOuterHeight;
+			
+			// Google like reappearance on upward scroll
+			if ( options.scrollHide ) {
+				offset = stickyHeight + options.lazyHeight; //negative offset for initial hiding
+			} else {
+				offset = options.lazyHeight;
+			}
+			
+			if ( 'none' !== options.transition ) {
+				stickyDelay = $element.outerHeight() * 2;
+			}
+			
+			// Update top margin on scroll
+			topMargin = ( options.topMargin !== null ) ? getTopMargin() : 0;
+			
+			// If our top margin changes (#wpadminbar), update our margin
+			if ( active && topMargin !== $element.css( 'margin-top' ) ) {
+				$element.css( 'margin-top', topMargin );
+			}
+			
+			if ( ! active && scroll >= stickpoints.top - topMargin + offset + stickyDelay ) {
 				void 0;
 				stickIt();
 				active = true;
-				bottom = false;
-				hold = false;
 			}
 			
 			if ( active && scroll >= stickpoints.top - topMargin + offset + ( $element.outerHeight() / 2 ) ) {
@@ -224,55 +253,39 @@
 				$element.addClass( 'sticky-navigation-transition' );
 			}
 			
-			//FORCE BOTTOM
-			if(options.keepInWrapper
-			&& parseInt(elementOffsetBottom - topMargin) !== parseInt(stickpoints.bottom)
-			&& scroll >= stickpoints.bottom - currentOuterHeight + offset){
-				void 0;
-				holdIt(true);
-				active = false;
-				bottom = true;
-				hold = true;
-			}
 			//Calculate lazyHeight and autoHide
-			if (active) {
-				var topValue = parseInt($element.css('top'));
-				if (scrollDir === 'up' && topValue !== 0) {
+			if ( active ) {
+				var topValue = parseInt( $element.css( 'top' ) );
+				if ( scrollDir === 'up' && topValue !== 0 ) {
 					var newTopValue = scrollDistance > -topValue ? 0 : topValue + scrollDistance;
-					$element.css('top', newTopValue + 'px');
-				} else if (scrollDir === "down" && topValue > -offset) {
+					$element.css( 'top', newTopValue + 'px' );
+				} else if ( scrollDir === "down" && topValue > -offset ) {
 					var newTopValue = scrollDistance > offset + topValue ? -offset : topValue - scrollDistance;
-					$element.css('top', newTopValue + 'px');
+					$element.css( 'top', newTopValue + 'px' );
 				}
 			}
             
             //UNSTICK
-            if ((active || hold || bottom) && scroll <= stickpoints.top - topMargin) {
+            if ( active && scroll <= stickpoints.top - topMargin ) {
                 void 0;
                 unStick();
             }
-            //RESPONSIVE baby ;-)
-			if(active || hold || bottom)
+			
+			//RESPONSIVE baby ;-)
+			if ( active ) {
 				syncWidth();
-            
-            //Special cases which need a specified position like margin:0 centered elements
-            if(options.syncPosition && active || hold)
-				syncPosition();
-            //console.log("active ",active,"hold ",hold,"bottom ",bottom);
-        },
-        stickUpResponsiveHandlerFn = function(event){
-            if(hold){
-                holdIt();
-                bottom = false;
-            }
-            void 0;
-                stickUpScrollHandlerFn(event);
+			}
 
+        },
+		
+        stickUpResponsiveHandlerFn = function( event ){
+            void 0;
+            stickUpScrollHandlerFn( event );
         };
 
         //init
-        var initialize = function(elem,opts){
-            $element = $(elem);
+        var initialize = function( elem, opts ) {
+            $element = $( elem );
 			
 			$element.after( $placeholder );
 			
@@ -281,40 +294,47 @@
 			}
 
             // adding a class to users div
-            $element.addClass(options.namespaceClass);
-            //getting options
-            if (opts) {
-                $.extend(true, options, opts);
-            } 
-            topMargin = (options.topMargin !== null) ? getTopMargin() : 0;
-            if(options.lazyHeight)
-                topMargin = topMargin + options.lazyHeight;
-            if(options.keepInWrapper){
-                if(options.wrapperSelector !== '')
-                    $parent = $element.closest(options.wrapperSelector);
-                //if no Wrapper available use offsetParent
-                if(!$parent.length)
-                    $parent = $element.parent();
-            }else{
-                $parent = $('body');
-            }
-            if(options.zIndex)
-                $element.css('z-index',options.zIndex);
-            
-            if(syncPosition){
-                syncMargins();
-            }
-            
-            $(window).on('scroll.stickUp', stickUpScrollHandlerFn);
-            $(window).on('resize.stickUp', stickUpResponsiveHandlerFn);
-            //initial round ;-)
-            stickUpScrollHandlerFn({target: document});
+            $element.addClass( options.namespaceClass );
 			
+            //getting options
+            if ( opts ) {
+                $.extend( true, options, opts );
+            } 
+			
+            topMargin = ( options.topMargin !== null ) ? getTopMargin() : 0;
+			
+            if ( options.lazyHeight ) {
+                topMargin = topMargin + options.lazyHeight;
+			}
+			
+            if ( options.keepInWrapper ) {
+                if ( options.wrapperSelector !== '' ) {
+                    $parent = $element.closest( options.wrapperSelector );
+				}
+				
+                //if no Wrapper available use offsetParent
+                if ( ! $parent.length ) {
+                    $parent = $element.parent();
+				}
+            } else {
+                $parent = $body;
+            }
+			
+            if( options.zIndex ) {
+                $element.css( 'z-index',options.zIndex );
+			}
+            
+            $( window ).on( 'scroll.stickUp', stickUpScrollHandlerFn );
+            $( window ).on( 'resize.stickUp', stickUpResponsiveHandlerFn );
+			
+            //initial round ;-)
+            stickUpScrollHandlerFn( {target: document} );
 			
         };
-        initialize.call(this, elem, opts);
 		
-		$(elem).on( 'stickUp:detach', function( opts ) {
+        initialize.call( this, elem, opts );
+		
+		$( elem ).on( 'stickUp:detach', function( opts ) {
 			void 0;
 			$element = $(this);
 			$element.removeClass(options.namespaceClass);
@@ -329,15 +349,12 @@
 				top: "",
 				left: "", 
 				right: "",
-				bottom:"",
 				width:""
 			});
 			active = false;
-			bottom = false;
-			hold = false;
 			disabled = true;
-			$(window).off('scroll.stickUp', stickUpScrollHandlerFn);
-			$(window).off('resize.stickUp', stickUpResponsiveHandlerFn);
+			$( window ).off( 'scroll.stickUp', stickUpScrollHandlerFn );
+			$( window ).off( 'resize.stickUp', stickUpResponsiveHandlerFn );
 		})
     };
 
@@ -349,33 +366,23 @@
 	
 }(jQuery, window, document));
 
-function generateStickyDebounce(func, wait, immediate) {
-	var timeout;
-	return function() {
-		var context = this, args = arguments;
-		var later = function() {
-			timeout = null;
-			if (!immediate) func.apply(context, args);
-		};
-		var callNow = immediate && !timeout;
-		clearTimeout(timeout);
-		timeout = setTimeout(later, wait);
-		if (callNow) func.apply(context, args);
-	};
-};
-
 (function ( $ ) {
 	$.fn.GenerateSimpleSticky = function( options ) {
 		var settings = $.extend({
 			menu: $( this ),
 			parent: false,
+			scrollHide: false,
 			offsetElement: '#wpadminbar',
 			disableOn: function() {
 				return true;
-			}
+			},
+			transition: "none"
 		}, options );
 		
-		var body = $( 'body' ), parent = null, offset = null;
+		var body = $( 'body' ), 
+			parent = null, 
+			offset = null,
+			autoHide = false;
 		
 		if ( settings.parent ) {
 			parent = settings.parent;
@@ -393,14 +400,17 @@ function generateStickyDebounce(func, wait, immediate) {
 		
 		offset = ( jQuery( settings.offsetElement ).length > 0 && jQuery( settings.offsetElement ).css( 'position' ) == 'fixed' ) ? jQuery( settings.offsetElement ).outerHeight() : 0;
 		
-		settings.menu.stickUp({
-			scrollHide: false,
+		var stickyOptions = {
+			scrollHide: settings.scrollHide,
 			keepInWrapper: true,
 			wrapperSelector: parent,
-			fixedClass: 'is_stuck navigation-stick',
-			topMargin: offset,
-			disableOn: settings.disableOn
-		});
+			fixedClass: 'is_stuck navigation-stick navigation-clone',
+			topMargin: 0,
+			disableOn: settings.disableOn,
+			transition: settings.transition
+		};
+		
+		settings.menu.stickUp( stickyOptions );
 		
 		if ( navigator.userAgent.match( /(iPod|iPhone|iPad)/ ) ) {
 			jQuery(document)
@@ -410,14 +420,7 @@ function generateStickyDebounce(func, wait, immediate) {
 			})
 			.on('blur', '.search-field', function() {
 				body.removeClass('fixfixed');
-				settings.menu.stickUp({
-					scrollHide: false,
-					keepInWrapper: true,
-					wrapperSelector: parent,
-					fixedClass: 'is_stuck navigation-stick',
-					topMargin: offset,
-					disableOn: settings.disableOn
-				});
+				settings.menu.stickUp( stickyOptions );
 			});
 		}
 	}
@@ -425,9 +428,10 @@ function generateStickyDebounce(func, wait, immediate) {
 
 jQuery( document ).ready( function($) {
 	var resizeEvent = 'onorientationchange' in window ? 'orientationchange' : 'resize',
-		body = $( 'body' );
+		body = $( 'body' ),
+		transition = 'none';
 			
-	if ( body.hasClass( 'sticky-menu-no-transition' ) ) {
+	if ( body.hasClass( 'sticky-enabled' ) ) {
 		
 		var navigation = $( '#site-navigation' );
 		
@@ -455,37 +459,50 @@ jQuery( document ).ready( function($) {
 			return true;
 		}
 		
-		$( navigation ).GenerateSimpleSticky({
-			disableOn: navigationDisableOn
-		});
-		
-		if ( body.hasClass( 'admin-bar' ) ) {
-			var navigationResizeCheck = generateStickyDebounce(function() {
-				navigation.trigger( 'stickUp:detach' );
-				$( navigation ).GenerateSimpleSticky({
-					disableOn: navigationDisableOn
-				});
-			}, 250);
-			
-			window.addEventListener( resizeEvent, navigationResizeCheck );
+		if ( body.hasClass( 'sticky-menu-fade' ) ) {
+			transition = 'fade';
 		}
+		
+		if ( body.hasClass( 'sticky-menu-slide' ) ) {
+			transition = 'slide';
+		}
+		
+		var autoHide = ( navigation.hasClass( 'auto-hide-sticky' ) ) ? true : false;
+		
+		if ( body.hasClass( 'nav-right-sidebar' ) || body.hasClass( 'nav-left-sidebar' ) ) {
+			autoHide = ( navigation.children().hasClass( 'auto-hide-sticky' ) ) ? true : false
+		}
+		
+		var options = {
+			transition: transition,
+			scrollHide: autoHide,
+			disableOn: navigationDisableOn
+		};
+		
+		$( navigation ).GenerateSimpleSticky( options );
 		
 		body.on( 'generate_navigation_location_updated', function() {
 			navigation.trigger( 'stickUp:detach' );
 			setTimeout(function() {
-				$( navigation ).GenerateSimpleSticky({
-					disableOn: navigationDisableOn
-				});
+				$( navigation ).GenerateSimpleSticky( options );
 			}, 250);
 		});
 		
-	}
+		navigation.on( 'stickUp:stickIt', function() {
+			navigation.attr( 'id', 'sticky-navigation' );
+		});
+		
+		navigation.on( 'stickUp:unStick', function() {
+			navigation.attr( 'id', 'site-navigation' );
+		});
+	 }
 	
 	if ( body.hasClass( 'mobile-header' ) && body.hasClass( 'mobile-header-sticky' ) ) {
 		
 		var mobileHeader = $( '#mobile-header' );
-		
+
 		mobileHeader.GenerateSimpleSticky({
+			scrollHide: ( mobileHeader.data( 'auto-hide-sticky' ) ) ? true : false,
 			disableOn: function() {
 				if ( ! mobileHeader.is( ':visible' ) ) {
 					return false;
@@ -493,22 +510,6 @@ jQuery( document ).ready( function($) {
 				return true;
 			}
 		});
-		
-		if ( body.hasClass( 'admin-bar' ) ) {
-			var mobileHeaderResizeCheck = generateStickyDebounce(function() {
-				mobileHeader.trigger( 'stickUp:detach' );
-				mobileHeader.GenerateSimpleSticky({
-					disableOn: function() {
-						if ( ! mobileHeader.is( ':visible' ) ) {
-							return false;
-						}
-						return true;
-					}
-				});
-			}, 250);
-			
-			window.addEventListener( resizeEvent, mobileHeaderResizeCheck );
-		}
 		
 	}
 });

@@ -10,13 +10,13 @@
 }
 
 @media( max-width: 768px ) {
-	.main-navigation:not(.slideout-navigation),
-	.navigation-clone {
-		display: none;
+	#site-navigation,
+	#sticky-navigation {
+		display: none !important;
 		opacity: 0;
 	}
-	.main-navigation.mobile-header-navigation {
-		display: block;
+	#mobile-header {
+		display: block !important;
 		opacity: 1;
 		width: 100% !important;
 	}

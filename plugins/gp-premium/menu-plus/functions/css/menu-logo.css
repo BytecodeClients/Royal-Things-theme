@@ -35,7 +35,7 @@
 	display: none !important;
 }
 
-.sticky-menu-logo .navigation-stick .navigation-logo {
+.sticky-menu-logo .navigation-stick:not(#sticky-placeholder) .navigation-logo {
 	display: block !important;
 }
 

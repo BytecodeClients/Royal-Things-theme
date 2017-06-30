@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Generate Typography\n"
-"POT-Creation-Date: 2017-03-09 11:43-0800\n"
+"POT-Creation-Date: 2017-06-12 00:28-0700\n"
 "PO-Revision-Date: 2015-05-20 10:48-0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -20,155 +20,97 @@ msgstr ""
 "X-Poedit-SearchPath-0: langs\n"
 "X-Poedit-SearchPath-1: typography\n"
 
-#: typography/functions/customizer/control.php:27
-msgid "Default fonts"
-msgstr ""
-
-#: typography/functions/customizer/control.php:28
-msgid "Google fonts"
-msgstr ""
-
-#: typography/functions/customizer/control.php:29
-msgid "Font family"
-msgstr ""
-
-#: typography/functions/customizer/control.php:123
-msgid "Reset"
-msgstr ""
-
-#: typography/functions/functions.php:43
+#: typography/functions/functions.php:45
 msgid "Typography"
 msgstr ""
 
-#: typography/functions/functions.php:52
-#: typography/functions/functions.php:75
+#: typography/functions/functions.php:54
 msgid "Body"
 msgstr ""
 
-#: typography/functions/functions.php:141
-#: typography/functions/functions.php:379
-#: typography/functions/functions.php:564
-#: typography/functions/functions.php:754
-#: typography/functions/functions.php:929
-#: typography/functions/functions.php:1027
-#: typography/functions/functions.php:1045
-#: typography/functions/functions.php:1063
-#: typography/functions/functions.php:1385
-#: typography/functions/secondary-nav-fonts.php:139
-msgid "Font weight"
-msgstr ""
-
-#: typography/functions/functions.php:179
-#: typography/functions/functions.php:421
-#: typography/functions/functions.php:602
-#: typography/functions/functions.php:792
-#: typography/functions/functions.php:967
-#: typography/functions/functions.php:1031
-#: typography/functions/functions.php:1049
-#: typography/functions/functions.php:1067
-#: typography/functions/functions.php:1423
-#: typography/functions/secondary-nav-fonts.php:177
-msgid "Text transform"
-msgstr ""
-
-#: typography/functions/functions.php:210
-#: typography/functions/functions.php:456
-#: typography/functions/functions.php:633
-#: typography/functions/functions.php:823
-#: typography/functions/functions.php:998
-#: typography/functions/functions.php:1454
-#: typography/functions/secondary-nav-fonts.php:208
+#: typography/functions/functions.php:146
+#: typography/functions/functions.php:337
+#: typography/functions/functions.php:466
+#: typography/functions/functions.php:578
+#: typography/functions/functions.php:702
+#: typography/functions/functions.php:831
+#: typography/functions/functions.php:946
+#: typography/functions/functions.php:1051
+#: typography/functions/functions.php:1165
+#: typography/functions/functions.php:1247
+#: typography/functions/secondary-nav-fonts.php:137
+#: typography/functions/woocommerce-fonts.php:99
 msgid "Font size"
 msgstr ""
 
-#: typography/functions/functions.php:237
+#: typography/functions/functions.php:181
 msgid "Line height"
 msgstr ""
 
-#: typography/functions/functions.php:264
+#: typography/functions/functions.php:216
 msgid "Paragraph margin"
 msgstr ""
 
-#: typography/functions/functions.php:280
+#: typography/functions/functions.php:239
 msgid "Top Bar"
 msgstr ""
 
-#: typography/functions/functions.php:305
-msgid "Top bar"
-msgstr ""
-
-#: typography/functions/functions.php:473
+#: typography/functions/functions.php:362
 msgid "Header"
 msgstr ""
 
-#: typography/functions/functions.php:496
+#: typography/functions/functions.php:425
 msgid "Site title"
 msgstr ""
 
-#: typography/functions/functions.php:660
-#: typography/functions/functions.php:1252
-#: typography/functions/functions.php:1279
-msgid "Mobile font size"
-msgstr ""
-
-#: typography/functions/functions.php:686
+#: typography/functions/functions.php:548
 msgid "Site tagline"
 msgstr ""
 
-#: typography/functions/functions.php:838
+#: typography/functions/functions.php:601
 msgid "Primary Navigation"
 msgstr ""
 
-#: typography/functions/functions.php:861
-msgid "Site navigation"
-msgstr ""
-
-#: typography/functions/functions.php:1013
+#: typography/functions/functions.php:733
 msgid "Content"
 msgstr ""
 
-#: typography/functions/functions.php:1023
+#: typography/functions/functions.php:793
 msgid "Heading 1 (H1)"
 msgstr ""
 
-#: typography/functions/functions.php:1035
-#: typography/functions/functions.php:1053
-#: typography/functions/functions.php:1071
-msgid "Font-size"
-msgstr ""
-
-#: typography/functions/functions.php:1041
+#: typography/functions/functions.php:908
 msgid "Heading 2 (H2)"
 msgstr ""
 
-#: typography/functions/functions.php:1059
+#: typography/functions/functions.php:1023
 msgid "Heading 3 (H3)"
 msgstr ""
 
-#: typography/functions/functions.php:1294
+#: typography/functions/functions.php:1073
 msgid "Widgets"
 msgstr ""
 
-#: typography/functions/functions.php:1317
+#: typography/functions/functions.php:1136
 msgid "Widget titles"
 msgstr ""
 
-#: typography/functions/functions.php:1481
+#: typography/functions/functions.php:1200
 msgid "Content font size"
 msgstr ""
 
-#: typography/functions/functions.php:1496
+#: typography/functions/functions.php:1223
 msgid "Footer"
 msgstr ""
 
-#: typography/functions/functions.php:1520
-msgid "Footer font size"
-msgstr ""
-
-#: typography/functions/secondary-nav-fonts.php:48
+#: typography/functions/secondary-nav-fonts.php:46
 msgid "Secondary Navigation"
 msgstr ""
 
-#: typography/functions/secondary-nav-fonts.php:71
-msgid "Secondary navigation"
+#: typography/functions/woocommerce-fonts.php:63
+msgid "Product titles"
+msgstr ""
+
+#: typography/functions/woocommerce-fonts.php:142
+msgid "Related/upsell title font size"
 msgstr ""

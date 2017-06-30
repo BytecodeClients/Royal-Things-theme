@@ -293,7 +293,13 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                         }
 
                         if( is_product_taxonomy() && ! yit_is_filtered_uri() && $term->term_id != $queried_object->term_id ){
-                            $link = add_query_arg( array( 'source_id' => $queried_object->term_id, 'source_tax' => $queried_object->taxonomy ), $link );
+
+                            $link = add_query_arg(
+                                array(
+                                    'source_id'                 => $queried_object->term_id,
+                                    'source_tax'                => $queried_object->taxonomy,
+                                    $queried_object->taxonomy   => $queried_object->slug
+                                ), $link );
                         }
 
                         if ( isset( $_GET['source_id'] ) && isset( $_GET['source_tax'] ) ) {
@@ -306,8 +312,16 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                             }
 
                             if( $add_source_id ) {
-                                $link = add_query_arg( array( 'source_id' => $_GET['source_id'], 'source_tax' => $_GET['source_tax'] ), $link );
+                                $args = array( 'source_id' => $_GET['source_id'], 'source_tax' => $_GET['source_tax'] );
+                                if( isset( $_GET[ $queried_object->taxonomy ] ) ){
+                                    $args[ $queried_object->taxonomy ] = $_GET[ $queried_object->taxonomy ];
+                                }
+                                $link = add_query_arg( $args, $link );
                             }
+                        }
+
+                        if( isset( $_GET['yith_shop_vendor'] ) ){
+                            $link = add_query_arg( array( 'yith_shop_vendor' => $_GET['yith_shop_vendor'] ), $link );
                         }
 
                         // Current Filter = this widget
@@ -499,7 +513,12 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                         }
 
                         if( is_product_taxonomy() && ! yit_is_filtered_uri() && $term->term_id != $queried_object->term_id ){
-                            $link = add_query_arg( array( 'source_id' => $queried_object->term_id, 'source_tax' => $queried_object->taxonomy ), $link );
+                            $link = add_query_arg(
+                                array(
+                                    'source_id'                 => $queried_object->term_id,
+                                    'source_tax'                => $queried_object->taxonomy,
+                                    $queried_object->taxonomy   => $queried_object->slug
+                                ), $link );
                         }
 
                         if ( isset( $_GET['source_id'] ) && isset( $_GET['source_tax'] ) ) {
@@ -512,8 +531,13 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                             }
 
                             if( $add_source_id ) {
-                                $link = add_query_arg( array( 'source_id' => $_GET['source_id'], 'source_tax' => $_GET['source_tax'] ), $link );
+                                $args = array( 'source_id' => $_GET['source_id'], 'source_tax' => $_GET['source_tax'] );
+                                $link = add_query_arg( $args, $link );
                             }
+                        }
+
+                        if( isset( $_GET['yith_shop_vendor'] ) ){
+                            $link = add_query_arg( array( 'yith_shop_vendor' => $_GET['yith_shop_vendor'] ), $link );
                         }
 
                         // Current Filter = this widget
@@ -704,7 +728,12 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                         }
 
                         if( is_product_taxonomy() && ! yit_is_filtered_uri() && $term->term_id != $queried_object->term_id ){
-                            $link = add_query_arg( array( 'source_id' => $queried_object->term_id, 'source_tax' => $queried_object->taxonomy ), $link );
+                            $link = add_query_arg(
+                                array(
+                                    'source_id'                 => $queried_object->term_id,
+                                    'source_tax'                => $queried_object->taxonomy,
+                                    $queried_object->taxonomy   => $queried_object->slug
+                                ), $link );
                         }
 
                         if ( isset( $_GET['source_id'] ) && isset( $_GET['source_tax'] ) ) {
@@ -717,8 +746,13 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                             }
 
                             if( $add_source_id ) {
-                                $link = add_query_arg( array( 'source_id' => $_GET['source_id'], 'source_tax' => $_GET['source_tax'] ), $link );
+                                $args = array( 'source_id' => $_GET['source_id'], 'source_tax' => $_GET['source_tax'] );
+                                $link = add_query_arg( $args, $link );
                             }
+                        }
+
+                        if( isset( $_GET['yith_shop_vendor'] ) ){
+                            $link = add_query_arg( array( 'yith_shop_vendor' => $_GET['yith_shop_vendor'] ), $link );
                         }
 
                         // Current Filter = this widget
@@ -1098,8 +1132,13 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                         }
 
                         if( $add_source_id ) {
-                            $link = add_query_arg( array( 'source_id' => $_GET['source_id'], 'source_tax' => $_GET['source_tax'] ), $link );
+                            $args = array( 'source_id' => $_GET['source_id'], 'source_tax' => $_GET['source_tax'] );
+                            $link = add_query_arg( $args, $link );
                         }
+                    }
+
+                    if( isset( $_GET['yith_shop_vendor'] ) ){
+                        $link = add_query_arg( array( 'yith_shop_vendor' => $_GET['yith_shop_vendor'] ), $link );
                     }
 
                     if (isset($_GET['product_cat'])) {
@@ -1118,7 +1157,12 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                     }
 
                     if( is_product_taxonomy() && ! yit_is_filtered_uri() && $term->term_id != $queried_object->term_id ){
-                        $link = add_query_arg( array( 'source_id' => $queried_object->term_id, 'source_tax' => $queried_object->taxonomy ), $link );
+                        $link = add_query_arg(
+                            array(
+                                'source_id'                 => $queried_object->term_id,
+                                'source_tax'                => $queried_object->taxonomy,
+                                $queried_object->taxonomy   => $queried_object->slug
+                            ), $link );
                     }
 
                     $check_for_current_widget = isset($_chosen_attributes[$taxonomy]) && is_array($_chosen_attributes[$taxonomy]['terms']) && $in_array_function($term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms']);

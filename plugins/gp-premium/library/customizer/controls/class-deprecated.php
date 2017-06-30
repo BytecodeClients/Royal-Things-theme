@@ -75,7 +75,7 @@ class Generate_Spacing_Customize_Control extends WP_Customize_Control {
 	public $description = '';
 	
 	public function enqueue() {
-		wp_enqueue_script( 'gp-spacing-customizer', plugin_dir_url( __FILE__ )  . '/js/spacing-customizer.js', array( 'customize-controls' ), GENERATE_SPACING_VERSION, true );
+		wp_enqueue_script( 'gp-spacing-customizer', plugin_dir_url( __FILE__ )  . 'js/spacing-customizer.js', array( 'customize-controls' ), GENERATE_SPACING_VERSION, true );
 	}
 	
 	public function to_json() {

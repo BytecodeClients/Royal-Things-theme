@@ -31,6 +31,8 @@ function generate_menu_plus_get_defaults()
 		'mobile_header_logo' => '',
 		'mobile_header_sticky' => 'disable',
 		'slideout_menu' => 'false',
+		'auto_hide_sticky' => false,
+		'mobile_header_auto_hide_sticky' => false,
 	);
 	
 	return apply_filters( 'generate_menu_plus_option_defaults', $generate_menu_plus_get_defaults );
@@ -172,6 +174,28 @@ function generate_menu_plus_customize_register( $wp_customize )
 		)
 	);
 	
+	// Auto hide on scroll down
+	$wp_customize->add_setting(
+		'generate_menu_plus_settings[auto_hide_sticky]',
+		array(
+			'default' => $defaults['auto_hide_sticky'],
+			'type' => 'option',
+			'sanitize_callback' => 'generate_premium_sanitize_checkbox'
+		)
+	);
+	
+	$wp_customize->add_control(
+		'generate_menu_plus_settings[auto_hide_sticky]',
+		array(
+			'type' => 'checkbox',
+			'label' => __( 'Hide when scrolling down','menu-plus' ),
+			'section' => 'menu_plus_sticky_menu',
+			'settings' => 'generate_menu_plus_settings[auto_hide_sticky]',
+			'priority' => 120,
+			'active_callback' => 'generate_sticky_navigation_activated',
+		)
+	);
+	
 	// Navigation logo
 	$wp_customize->add_setting( 
 		'generate_menu_plus_settings[sticky_menu_logo]', 
@@ -306,6 +330,27 @@ function generate_menu_plus_customize_register( $wp_customize )
 		)
 	);
 	
+	// Auto hide on scroll down
+	$wp_customize->add_setting(
+		'generate_menu_plus_settings[mobile_header_auto_hide_sticky]',
+		array(
+			'default' => $defaults['mobile_header_auto_hide_sticky'],
+			'type' => 'option',
+			'sanitize_callback' => 'generate_premium_sanitize_checkbox'
+		)
+	);
+	
+	$wp_customize->add_control(
+		'generate_menu_plus_settings[mobile_header_auto_hide_sticky]',
+		array(
+			'type' => 'checkbox',
+			'label' => __( 'Hide when scrolling down','menu-plus' ),
+			'section' => $header_section,
+			'settings' => 'generate_menu_plus_settings[mobile_header_auto_hide_sticky]',
+			'active_callback' => 'generate_mobile_header_sticky_activated'
+		)
+	);
+	
 	// Slide-out menu section
 	$wp_customize->add_section(
 		'menu_plus_slideout_menu',
@@ -346,23 +391,6 @@ function generate_menu_plus_customize_register( $wp_customize )
 }
 endif;
 
-if ( ! function_exists( 'generate_menu_plus_customizer_live_preview' ) ) :
-/**
- * Add our live preview JS
- */
-add_action( 'customize_preview_init', 'generate_menu_plus_customizer_live_preview' );
-function generate_menu_plus_customizer_live_preview()
-{
-	wp_enqueue_script( 
-		  'generate-menu-plus-themecustomizer',
-		  trailingslashit( plugin_dir_url( __FILE__ ) ) . 'js/customizer.js',
-		  array( 'jquery','customize-preview' ),
-		  GENERATE_MENU_PLUS_VERSION,
-		  true
-	);
-}
-endif;
-
 if ( ! function_exists( 'generate_menu_plus_enqueue_css' ) ) :
 /**
  * Enqueue scripts
@@ -378,12 +406,7 @@ function generate_menu_plus_enqueue_css()
 	$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 	
 	// Add sticky menu script
-	if ( 'false' !== $generate_menu_plus_settings['sticky_menu'] && 'none' !== $generate_menu_plus_settings['sticky_menu_effect'] ) {
-		wp_enqueue_style( 'generate-advanced-sticky', plugin_dir_url( __FILE__ ) . "css/advanced-sticky{$suffix}.css", array(), GENERATE_MENU_PLUS_VERSION );
-	}
-	
-	// Add sticky menu script
-	if ( 'false' !== $generate_menu_plus_settings['sticky_menu'] && 'none' == $generate_menu_plus_settings['sticky_menu_effect'] ) {
+	if ( 'false' !== $generate_menu_plus_settings['sticky_menu'] ) {
 		wp_enqueue_style( 'generate-sticky', plugin_dir_url( __FILE__ ) . "css/sticky{$suffix}.css", array(), GENERATE_MENU_PLUS_VERSION );
 	}
 	
@@ -434,23 +457,8 @@ function generate_menu_plus_enqueue_js()
 	$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 	
 	// Add sticky menu script
-	if ( 'false' !== $generate_menu_plus_settings['sticky_menu'] && 'none' !== $generate_menu_plus_settings['sticky_menu_effect'] ) {
-		if ( 'enable' == $generate_settings['nav_search'] ) {
-			$array = array( 'jquery', 'generate-navigation-search' );
-		} else {
-			$array = array( 'jquery' );
-		}
-		wp_enqueue_script( 'generate-advanced-sticky', plugin_dir_url( __FILE__ ) . "js/advanced-sticky{$suffix}.js", $array, GENERATE_MENU_PLUS_VERSION, true );
-	}
-	
-	// Add sticky menu script
-	if ( ( 'false' !== $generate_menu_plus_settings['sticky_menu'] && 'none' == $generate_menu_plus_settings['sticky_menu_effect'] ) || ( 'enable' == $generate_menu_plus_settings['mobile_header'] && 'enable' == $generate_menu_plus_settings['mobile_header_sticky'] ) ) {
+	if ( ( 'false' !== $generate_menu_plus_settings['sticky_menu'] ) || ( 'enable' == $generate_menu_plus_settings['mobile_header'] && 'enable' == $generate_menu_plus_settings['mobile_header_sticky'] ) ) {
 		wp_enqueue_script( 'generate-sticky', plugin_dir_url( __FILE__ ) . "js/sticky{$suffix}.js", array( 'jquery' ), GENERATE_MENU_PLUS_VERSION, true );
-		
-		if ( function_exists( 'wp_script_add_data' ) ) {
-			wp_enqueue_script( 'generate-sticky-matchMedia', plugin_dir_url( __FILE__ ) . "js/matchMedia{$suffix}.js", array(), GENERATE_MENU_PLUS_VERSION, true );
-			wp_script_add_data( 'generate-sticky-matchMedia', 'conditional', 'lt IE 10' );
-		}
 	}
 	
 	// Add slideout menu script
@@ -517,10 +525,6 @@ function generate_menu_plus_inline_css()
 	}
 	
 	$return = '';
-	if ( 'contained-nav' == $generate_settings['nav_layout_setting'] && 'false' !== $generate_menu_plus_settings['sticky_menu'] ) {
-		$return .= '@media (min-width: ' . absint( $generate_settings['container_width'] ) . 'px) { .navigation-stick:not(.gen-sidebar-nav) { left: 50%; width: 100% !important; max-width: ' . absint( $generate_settings['container_width'] ) . 'px !important; margin-left: -' . absint( $generate_settings['container_width'] / 2 ) . 'px !important; } }';
-		$return .= '@media (min-width: 768px) and (max-width: ' . ( absint( $generate_settings['container_width'] - 1 ) ) . 'px) {.navigation-stick:not(.gen-sidebar-nav) { width: 100%;left:0; } }';
-	}
 	
 	if ( '' !== $generate_menu_plus_settings['sticky_menu_logo'] ) {
 		$return .= '.main-navigation .navigation-logo img {height:' . absint( $menu_height ) . 'px;}';
@@ -577,8 +581,14 @@ function generate_menu_plus_mobile_header()
 	if ( 'disable' == $generate_menu_plus_settings[ 'mobile_header' ] ) {
 		return;
 	}
+
+	if ( 'false' !== $generate_menu_plus_settings['mobile_header_auto_hide_sticky'] && $generate_menu_plus_settings[ 'mobile_header_auto_hide_sticky' ] ) {
+		$hide_sticky = ' data-auto-hide-sticky="true"';
+	} else {
+		$hide_sticky = '';
+	}
 	?>
-	<nav itemtype="http://schema.org/SiteNavigationElement" itemscope="itemscope" id="mobile-header" <?php generate_navigation_class( 'mobile-header-navigation' ); ?>>
+	<nav itemtype="http://schema.org/SiteNavigationElement" itemscope="itemscope" id="mobile-header"<?php echo $hide_sticky;?> <?php generate_navigation_class( 'mobile-header-navigation' ); ?>>
 		<div class="inside-navigation grid-container grid-parent">
 			<?php do_action( 'generate_inside_mobile_header' ); ?>
 			<button class="menu-toggle" aria-controls="mobile-menu" aria-expanded="false">
@@ -900,6 +910,28 @@ function generate_menu_plus_slidebar_icon( $nav, $args )
 	// Our primary menu isn't set, return the regular nav
 	// In this case, the search icon is added to the generate_menu_fallback() function in navigation.php
     return $nav;
+}
+endif;
+
+if ( ! function_exists( 'generate_sticky_navigation_classes' ) ) :
+/**
+ * Adds custom classes to the navigation
+ * @since 0.1
+ */
+add_filter( 'generate_navigation_class', 'generate_sticky_navigation_classes');
+function generate_sticky_navigation_classes( $classes ) {
+	
+	$generate_menu_plus_settings = wp_parse_args( 
+		get_option( 'generate_menu_plus_settings', array() ), 
+		generate_menu_plus_get_defaults() 
+	);
+
+	if ( 'false' !== $generate_menu_plus_settings['sticky_menu'] && $generate_menu_plus_settings[ 'auto_hide_sticky' ] ) {
+		$classes[] = 'auto-hide-sticky';
+	}
+
+	return $classes;
+	
 }
 endif;
 
