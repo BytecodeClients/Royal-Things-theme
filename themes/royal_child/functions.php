@@ -1,5 +1,11 @@
 <?php
 
+add_filter( 'wp_mail_from', 'my_mail_from' );
+function my_mail_from( $email ) {
+    return "info@royalthings.be";
+}
+
+
 /*
 |----------------------------------------------------
 |  Framework: Require once to clean up WordPress
@@ -15,10 +21,7 @@ require_once("cleanup.php");
 */
 
 function add_theme_scripts() {
-  
-  // JS
-  wp_enqueue_script( 'script', get_stylesheet_directory_uri() . '/js/royal.js', array ( 'jquery' ), 1.0, true);
-
+  $theme_version = 'v1.1';
 }
 add_action( 'wp_enqueue_scripts', 'add_theme_scripts' );
 
@@ -289,6 +292,21 @@ function royal_widgets_init() {
 
 /*
 |------------------------------------------------------
+|  WooCommerce:  Rename 'Stock labels'
+|------------------------------------------------------
+*/
+
+add_filter('woocommerce_get_availability', 'custom_get_availability');
+function custom_get_availability($availability)
+{
+$availability['availability'] = str_ireplace('Out of stock', 'Sold Out!', $availability['availability']);
+$availability['availability'] = str_ireplace('Beschikbaar via nabestelling', 'Maatwerk - Op bestelling', $availability['availability']);
+
+return $availability;
+}
+
+/*
+|------------------------------------------------------
 |  WooCommerce:  Rename 'You may also like'
 |------------------------------------------------------
 */
@@ -297,7 +315,8 @@ add_filter('gettext', 'translate_like');
 add_filter('ngettext', 'translate_like');
 function translate_like($translated)
 {
-	$translated = str_ireplace('You may also like&hellip;', 'Accessoires', $translated);
+	$translated = str_ireplace('You may also like&hellip;', 'Accessories', $translated);
+	$translated = str_ireplace('Andere suggesties&hellip;', 'Accesoires', $translated);
 	return $translated;
 }
 
@@ -312,6 +331,7 @@ add_filter('ngettext', 'translate_related');
 function translate_related($translated)
 {
 	$translated = str_ireplace('Related Products', 'Same Collection', $translated);
+	$translated = str_ireplace('Gerelateerde producten', 'Zelfde Collectie', $translated);
 	return $translated;
 }
 
@@ -326,6 +346,7 @@ add_filter('ngettext', 'translate_add');
 function translate_add($translated)
 {
 	$translated = str_ireplace('Add to cart', 'Order Now', $translated);
+	$translated = str_ireplace('In winkelmand', 'Bestel Nu', $translated);
 	return $translated;
 }
 
@@ -350,6 +371,23 @@ function woocommerce_blog_page_header() {
     }
 
     return false;
+}
+
+/*
+|------------------------------------------------------
+|  WordPress: activate masonary for blog
+|------------------------------------------------------
+*/
+
+add_filter('generate_blog_masonry','generate_blog_enable_blog_masonry');
+function generate_blog_enable_blog_masonry()
+{
+    // If we're on the blog
+    if ( is_home() )
+            return 'true';
+	
+        // Otherwise, disable it
+	return 'false';
 }
 
 /*
@@ -445,6 +483,30 @@ function generate_dequeue_secondary_nav_mobile() {
 
 /*
 |------------------------------------------------------
+|  GeneratePress: add extra content to slide-out
+|------------------------------------------------------
+*/
+
+add_action( 'generate_inside_slideout_navigation', 'add_search_to_mobile_slideout', 999 );
+function add_search_to_mobile_slideout() {
+   ?>
+   <div class="mobile-search"><?php get_search_form(); ?></div><?php
+   wp_nav_menu( array( 'theme_location' => 'slide-out-header-menu' ) );
+}
+
+/*
+|------------------------------------------------------
+|  GeneratePress: create extra menu header for slide-out
+|------------------------------------------------------
+*/
+
+function register_my_menu() {
+  register_nav_menu('slide-out-header-menu',__( 'slide-out Header Menu' ));
+}
+add_action( 'init', 'register_my_menu' );	
+
+/*
+|------------------------------------------------------
 |  WooCommerce Detail: Title on top
 |------------------------------------------------------
 */
@@ -466,6 +528,18 @@ add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_p
 
 /*
 |------------------------------------------------------
+|  WooCommerce Detail: Display variation's price even if min and max prices are the same
+|------------------------------------------------------
+*/
+add_filter('woocommerce_available_variation', function ($value, $object = null, $variation = null) {
+  if ($value['price_html'] == '') {
+    $value['price_html'] = '<span class="price">' . $variation->get_price_html() . '</span>';
+  }
+  return $value;
+}, 10, 3);
+
+/*
+|------------------------------------------------------
 |  WooCommerce Detail: Move sale flash to price
 |------------------------------------------------------
 */
@@ -473,6 +547,146 @@ add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_p
 remove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_sale_flash', 10 );
 
 add_action( 'woocommerce_single_product_summary', 'woocommerce_show_product_sale_flash', 10 );
+
+/*
+|------------------------------------------------------
+|  WooCommerce Breadcrumbs: Move sale flash to price
+|------------------------------------------------------
+*/
+
+add_filter( 'woocommerce_breadcrumb_defaults', 'my_change_breadcrumb_delimiter' );
+function my_change_breadcrumb_delimiter( $defaults ) {
+ // Change the breadcrumb delimiter from '/' to '>'
+ $defaults['delimiter'] = ' &nbsp;>&nbsp; ';
+ return $defaults;
+}
+
+/*
+|------------------------------------------------------
+|  Woocommerce: Add VAT field
+|------------------------------------------------------
+*/
+
+// Hook in
+add_filter( 'woocommerce_checkout_fields' , 'custom_override_checkout_fields');
+
+// Our hooked in function - $fields is passed via the filter!
+function custom_override_checkout_fields( $fields ) {
+     $fields['billing']['billing_vat'] = array(
+    'label'     => __('VAT no', 'woocommerce'),
+    'placeholder'   => _x('VAT number', 'placeholder', 'woocommerce'),
+    'required'  => false,
+    'class'     => array('form-row-wide'),
+    'clear'     => true
+     );
+
+     return $fields;
+}
+
+add_filter( 'woocommerce_checkout_fields', 'yourplugin_move_checkout_fields' );
+
+function yourplugin_move_checkout_fields( $fields ) {
+	// Author: apppresser.com
+
+	// Move these around as necessary. You'll see we added email first.
+	$billing_order = array(
+		"billing_email",
+		"billing_first_name", 
+		"billing_last_name", 
+		"billing_company",
+		"billing_vat",
+		"billing_address_1", 
+		"billing_address_2", 
+		"billing_postcode", 
+		"billing_country",
+		"billing_state",
+		"billing_phone"
+	);
+
+	// This sets the billing fields in the order above
+	foreach($billing_order as $billing_field) {
+	    $billing_fields[$billing_field] = $fields["billing"][$billing_field];
+	}
+
+	$fields["billing"] = $billing_fields;
+
+	return $fields;
+}
+
+/* Display field value on the order edit page */
+ 
+add_action( 'woocommerce_admin_order_data_after_billing_address', 'my_custom_checkout_field_display_admin_order_meta', 10, 1 );
+
+function my_custom_checkout_field_display_admin_order_meta($order){
+    echo '<p><strong>'.__('VAT no From Checkout Form').':</strong> ' . get_post_meta( $order->get_id(), '_billing_vat', true ) . '</p>';
+}
+
+/*
+|------------------------------------------------------
+|  Woocommerce: Change Variable price
+|------------------------------------------------------
+*/
+
+add_filter( 'woocommerce_variable_price_html', 'variation_price_format', 10, 2 );
+ 
+function variation_price_format( $price, $product ) {
+ 
+// 1. Find the minimum regular and sale prices
+
+#Step 1: Get product varations
+$available_variations = $product->get_available_variations();
+$countVar = count($available_variations);
+
+#Step 2: Create the variable product objects and get cheapest
+$variations = array();
+$varId;
+$lowestPrice = 0;
+
+for ($x = 0; $x < $countVar; $x++) {
+    $localVar = new WC_Product_Variation( $available_variations[$x]['variation_id'] );
+    $variations[$x] = $localVar;
+
+    $normalPrice = $localVar ->regular_price;
+    if (!empty($normalPrice) and $normalPrice < $lowestPrice or $lowestPrice == 0) {
+        $varId = $x;
+        $lowestPrice = $localVar ->regular_price;
+    }
+    $salePrice = $localVar ->sale_price;
+    if(!empty($salePrice) and $salePrice < $lowestPrice or $lowestPrice == 0) {
+        $varId = $x;
+        $lowestPrice = $localVar ->sale_price;
+    }
+}
+
+$cheapestVar = $variations[$varId];
+
+// 2. New $price
+if ($cheapestVar ->sale_price != 0 and $cheapestVar ->sale_price < $cheapestVar ->regular_price) {
+$price = sprintf( __( '<div class="priceSaleTitle">From</div><del>%1$s</del><ins>%2$s</ins>', 'woocommerce' ), wc_price( $cheapestVar ->regular_price ), wc_price( $cheapestVar ->sale_price ) );
+} else {
+$price = sprintf( __( '<div class="priceTitle">From</div> %1$s', 'woocommerce' ), wc_price( $cheapestVar ->regular_price ) );
+}
+ 
+// 3. Return edited $price
+ 
+return $price;
+}
+
+/*
+|------------------------------------------------------
+|  Woocommerce: Display Sold out label
+|------------------------------------------------------
+*/
+
+add_action( 'woocommerce_before_shop_loop_item_title', 'display_sold_out_loop_woocommerce' );
+ 
+function display_sold_out_loop_woocommerce() {
+    global $product;
+ 
+    if ( !$product->is_in_stock() ) {
+        echo '<span class="soldout">' . __( 'Sold Out', 'woocommerce' ) . '</span>';
+    }
+} 
 
 /*
 |------------------------------------------------------

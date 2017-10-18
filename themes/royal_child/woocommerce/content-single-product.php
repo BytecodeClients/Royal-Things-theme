@@ -64,6 +64,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			 * @hooked WC_Structured_Data::generate_product_data() - 60
 			 */
 			do_action( 'woocommerce_single_product_summary' );
+			echo "<div class='tax-indication'>";
+			echo __('All prices include VAT and transport service','royal_theme');
+			echo "</div>";			
+			echo "<div class='share'><h3>";
+			echo __('Share','royal_theme');
+			echo "</h3>";
+			echo do_shortcode('[addtoany]');
+			echo "</div>";
 		?>
 
 	</div><!-- .summary -->

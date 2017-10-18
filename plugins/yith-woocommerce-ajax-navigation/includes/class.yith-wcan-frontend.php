@@ -47,7 +47,7 @@ if ( ! class_exists( 'YITH_WCAN_Frontend' ) ) {
 
             $theme_support = apply_filters( 'yith_wcan_theme_use_wp_the_query_object', array(
                     'porto'
-                ) 
+                )
             );
 
             $current_theme = strtolower( wp_get_theme()->Template );
@@ -128,7 +128,7 @@ if ( ! class_exists( 'YITH_WCAN_Frontend' ) ) {
                 $is_qTranslateX_and_yit_core_1_0_0 = class_exists( 'QTX_Translator' ) && defined('YIT_CORE_VERSION') && '1.0.0' == YIT_CORE_VERSION;
                 $is_problematic_theme = in_array( wp_get_theme()->get_template(), $problematic_theme );
 
-                if( $is_qTranslateX_and_yit_core_1_0_0 || $is_problematic_theme ){
+                if( $is_qTranslateX_and_yit_core_1_0_0 || $is_problematic_theme || class_exists( 'SiteOrigin_Panels' ) ){
                     add_filter( 'yith_wcan_skip_layered_nav_query', '__return_true' );
                 }
 

@@ -26,8 +26,6 @@
 .xoo_wishlist_add {
 	color:#555;
 	text-align:left;
-	margin-left:5px;
-	margin-top: 5px;
 	padding:5px;
 	font-size:19px;
 }
@@ -78,7 +76,7 @@ li.product:hover .icon-heart:before,
 	display:inline-block;
 	border: solid 1px #000000;
 	width:100%;
-	max-width: 320px;
+	max-width: 325px;
 	text-align: center !important;
 }
 
